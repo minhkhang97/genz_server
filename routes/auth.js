@@ -4,12 +4,17 @@ const {validationResult} = require('express-validator');
 const {loginValid} = require('../utils/validation');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const passport = require('passport');
 
 const User = require('../models/user.model');
 
 //dang nhap cho customer
 
 //cho admin
+router.get('/admin/user', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    console.log(req.user);
+    return res.status(200).json(req.user);
+})
 
 //login
 router.post('/admin/login', loginValid, async (req, res) => {

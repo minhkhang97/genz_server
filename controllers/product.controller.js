@@ -9,7 +9,7 @@ const OrderDetail = require("../models/order_detail.model");
 const findAllProduct = async () => {
   const products = await Product.find()
     .populate({ path: "categories", select: "_id name" })
-    .populate("user");
+    .populate({path: 'user', select: '_id email'});
   //.populate({ path: "create_at", populate: { path: "user" } });
   return products;
 };
@@ -24,6 +24,7 @@ const findProductByPage = async (page, limit = 10) => {
 
 //filter: theo ten, theo gia ban
 
+
 const findProductByCategory = async (idCategory) => {
   const products = await Product.find({ category: idCategory });
   return products;
@@ -34,7 +35,7 @@ const findOneProduct = async (id) => {
   const product = await Product.findById(id).populate({
     path: "categories",
     select: "_id name",
-  });
+  }).populate({path: 'user', select: '_id email'});
   return product;
 };
 
@@ -64,35 +65,11 @@ const updateProduct = async (id, product) => {
   const productBeforeUpdate = await Product.findOne({ _id: id });
 
   //update product
-    //viet hoi dai, sua sau
   //console.log(product);
-  const {
-    name,
-    price,
-    discount,
-    introduce,
-    description,
-    photos,
-    isPublic,
-    status,
-    quantity,
-    properties,
-    categories,
-  } = product;
   const productAfterUpdate = await Product.findOneAndUpdate(
     { _id: id },
     {
-      name,
-      price,
-      discount,
-      introduce,
-      description,
-      photos,
-      isPublic,
-      status,
-      quantity,
-      properties,
-      categories,
+      ...product,
       create_at: Date.now(),
     },
     { new: true }

@@ -12,7 +12,7 @@ const applyPassport = (passport) => {
     }
     passport.use(new Strategy(options, async (payload, done) => {
         //ko hieu lam nhung ma payload bh se la accessToken sau decode
-        //console.log(payload);
+        console.log(payload);
         try {
             const user = await User.findOne({_id: payload.sub});
 
